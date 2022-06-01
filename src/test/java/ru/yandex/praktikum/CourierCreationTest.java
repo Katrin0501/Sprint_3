@@ -13,9 +13,9 @@ import static ru.yandex.praktikum.CourierClient.*;
 import static ru.yandex.praktikum.model.Courier.getRandomCourier;
 
 
-public class CourierTest {
+public class CourierCreationTest {
     Courier courier;
-    int courierId = 0;
+    int courierId;
 
     @Before
     public void init() {
@@ -25,10 +25,9 @@ public class CourierTest {
 
     @Test
     @DisplayName("Создание курьера") // имя теста
-    @Description("Базовый тест - успешноу создание курьера")
-    public void CourierTest() {
+    @Description("Базовый тест - успешного создания курьера и проверки его id")
+    public void successfulCreationTest() {
 
-        //Действия
         Response responseCreate = createCourier(courier);
         //Проверка
         assertEquals(SC_CREATED, responseCreate.statusCode());
@@ -43,28 +42,25 @@ public class CourierTest {
     @Test
     @DisplayName("Нет логина") // имя теста
     @Description("Недостаточно данных для создания учетной записи")
-    public void CourierNotLoginTest() {
+    public void courierNotLoginTest() {
 
         Courier courier = new Courier("", getRandomCourier().getPassword(), getRandomCourier().getFirstName());
         Response responseCreate = createCourier(courier);
         responseCreate.then().log().all().extract();
         assertEquals(SC_BAD_REQUEST, responseCreate.statusCode());
-        assertEquals(responseCreate.body().jsonPath().getString("message"),"Недостаточно данных для создания учетной записи");
-
-
+        assertEquals("Недостаточно данных для создания учетной записи",responseCreate.body().jsonPath().getString("message"));
 
     }
 
     @Test
     @DisplayName("Нет пароля") // имя теста
     @Description("Недостаточно данных для создания учетной записи")
-    public void CourierNotPasswordTest() {
+    public void courierNotPasswordTest() {
         Courier courier = new Courier(getRandomCourier().getLogin(), "", getRandomCourier().getFirstName());
         Response responseCreate = createCourier(courier);
+        responseCreate.then().log().all().extract();
         assertEquals(SC_BAD_REQUEST, responseCreate.statusCode());
-        assertEquals(responseCreate.body().jsonPath().getString("message"),"Недостаточно данных для создания учетной записи");
-
-
+        assertEquals("Недостаточно данных для создания учетной записи",responseCreate.body().jsonPath().getString("message"));
 
     }
 
@@ -73,30 +69,29 @@ public class CourierTest {
     @DisplayName("Одинаковый логин") // имя теста
     @Description("Логин уже используется")
 
-    public void CourierSameLoginTest() {
+    public void courierSameLoginTest() {
         String login = "Самый лучший курьер";
 
         Courier courier = new Courier(login, getRandomCourier().getPassword(), getRandomCourier().getFirstName());
         createCourier(courier);
-        Courier courierTwo = new Courier(login, getRandomCourier().getPassword(), getRandomCourier().getFirstName());
-        Response responseCreateTwo = createCourier(courierTwo);
-        Assert.assertEquals(SC_CONFLICT, responseCreateTwo.statusCode());
-        assertEquals(responseCreateTwo.body().jsonPath().getString("message"),"Этот логин уже используется");
-
-
+        Courier courierTwo = new Courier(login, courier.getPassword(), courier.getFirstName());
+        Response responseCreate = createCourier(courierTwo);
+        responseCreate.then().log().all().extract();
+        Assert.assertEquals(SC_CONFLICT, responseCreate.statusCode());
+        assertEquals("Этот логин уже используется",responseCreate.body().jsonPath().getString("message"));
     }
 
     @Test
     @DisplayName("Создание 2х одинаковых курьеров") // имя теста
     @Description("Этот логин уже используется")
-    public void CourierOneToOneTest() {
-        Courier courier = new Courier("Kva4", "La4", "Da4");
-        Response responseCreate = createCourier(courier);
-        Courier courierTwo = new Courier("Kva4", "La4", "Da4");
-        Response responseCreateTwo = createCourier(courierTwo);
-        responseCreateTwo.then().log().all().extract();
-        Assert.assertEquals(SC_CONFLICT, responseCreateTwo.statusCode());
-        assertEquals(responseCreateTwo.body().jsonPath().getString("message"),"Этот логин уже используется");
+    public void courierOneToOneTest() {
+        Courier courier = new Courier(getRandomCourier().getLogin(), getRandomCourier().getPassword(), getRandomCourier().getFirstName());
+        createCourier(courier);
+        Courier courierTwo = new Courier(courier.getLogin(), courier.getPassword(), courier.getFirstName());
+        Response responseCreate = createCourier(courierTwo);
+        responseCreate.then().log().all().extract();
+        Assert.assertEquals(SC_CONFLICT, responseCreate.statusCode());
+        assertEquals("Этот логин уже используется",responseCreate.body().jsonPath().getString("message"));
 
     }
 
