@@ -8,7 +8,6 @@ public class Courier {
     private String firstName;
 
 
-
     public Courier(String login, String password, String firstName) {
         this.login = login;
         this.password = password;
@@ -16,13 +15,13 @@ public class Courier {
     }
 
 
-    public static  Courier getRandomCourier(){
+    public static Courier getRandomCourier() {
         String login = RandomStringUtils.randomAlphabetic(10);
         String password = RandomStringUtils.randomAlphabetic(10);
         String firstName = RandomStringUtils.randomAlphabetic(10);
-        return new Courier(login,password,firstName);
+        return new Courier(login, password, firstName);
 
-}
+    }
 
 
     public String getLogin() {
@@ -51,10 +50,6 @@ public class Courier {
 
     @Override
     public String toString() {
-        return "Courier{" +
-                "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                '}';
+        return String.format("Courier{login='%s', password='%s', firstName='%s'}", login, password, firstName);
     }
 }

@@ -89,18 +89,8 @@ public class CreateOrder {
 
     @Override
     public String toString() {
-        return "CreateOrder{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", address='" + address + '\'' +
-                ", metroStation='" + metroStation + '\'' +
-                ", phone='" + phone + '\'' +
-                ", rentTime=" + rentTime +
-                ", deliveryDate='" + deliveryDate + '\'' +
-                ", comment='" + comment + '\'' +
-                ", color=" + color +
-                '}';
+        return String.format("CreateOrder{firstName='%s', lastName='%s', address='%s', metroStation='%s', phone='%s', rentTime=%s', deliveryDate='%s', comment='%s', color=%s'}"
+                ,firstName,lastName,address,metroStation,phone,rentTime,deliveryDate,comment,color);
     }
-
 
 }
