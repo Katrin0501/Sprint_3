@@ -3,6 +3,8 @@ package ru.yandex.praktikum;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -11,7 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static org.apache.http.HttpStatus.SC_CREATED;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static ru.yandex.praktikum.CourierClient.createOrders;
 import static ru.yandex.praktikum.model.CreateOrder.getRandomOrder;
 
@@ -51,14 +55,10 @@ public class CreatingOrdersTest {
         List<String>colors = Stream.of(black,grey).filter(x->!x.isBlank()).collect(Collectors.toList());
         createOrder.setColor(colors);
         Response responseOrders = createOrders(createOrder);
-        responseOrders.then().log().all().extract();
-        assertEquals(SC_CREATED,responseOrders.statusCode());
-        responseOrders.body().jsonPath().getInt( "track");
-
+       assertEquals(SC_CREATED,responseOrders.statusCode());
+        MatcherAssert.assertThat(responseOrders.body().jsonPath().getInt( "track"), notNullValue());
 
 
     }
-
-
 
 }

@@ -89,7 +89,7 @@ public class CreateOrder {
 
     @Override
     public String toString() {
-        return "CreateOrder{" +
+        return String.format("CreateOrder{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
@@ -99,7 +99,7 @@ public class CreateOrder {
                 ", deliveryDate='" + deliveryDate + '\'' +
                 ", comment='" + comment + '\'' +
                 ", color=" + color +
-                '}';
+                '}');
     }
 
 

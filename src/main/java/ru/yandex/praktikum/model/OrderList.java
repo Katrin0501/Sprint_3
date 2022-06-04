@@ -22,7 +22,7 @@ public class OrderList {
 
     @Override
     public String toString() {
-        return "OrderList{" +
+        return String.format("OrderList{" +
                 "id='" + id + '\'' +
                 ", courierId=" + courierId +
                 ", firstName='" + firstName + '\'' +
@@ -38,6 +38,6 @@ public class OrderList {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", status=" + status +
-                '}';
+                '}');
     }
 }

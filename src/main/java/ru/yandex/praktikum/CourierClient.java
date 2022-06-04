@@ -2,6 +2,7 @@ package ru.yandex.praktikum;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import ru.yandex.praktikum.model.Courier;
 import ru.yandex.praktikum.model.CourierCredentials;
 import ru.yandex.praktikum.model.CreateOrder;
@@ -15,22 +16,23 @@ public class CourierClient extends BaseApiClient {
 @Step("Создать курьера")
     public static Response createCourier(Courier courier) {
 
-        return given()
+        return (Response) given()
                 .spec(getSeqSpec())
                 .body(courier)
                 .when()
-                .post(BASE_URL + "/api/v1/courier");
+                .post(BASE_URL + "/api/v1/courier").then().log().all().extract();
 
     }
 
     @Step("Логин курьера")
     public static Response loginCourier(CourierCredentials courierCredentials) {
 
-        return given()
+        return (Response) given()
                 .spec(getSeqSpec())
                 .body(courierCredentials)
                 .when()
-                .post(BASE_URL + "/api/v1/courier/login");
+                .post(BASE_URL + "/api/v1/courier/login")
+                .then().log().all().extract();
     }
 
     @Step("Удалить курьера")
@@ -51,11 +53,16 @@ public class CourierClient extends BaseApiClient {
     @Step("Создать заказ")
     public static Response createOrders(CreateOrder createOrder) {
 
-        return given()
+        return (Response) given()
                 .spec(getSeqSpec())
                 .body(createOrder)
                 .when()
-                .post(BASE_URL + "/api/v1/orders");
+                .post(BASE_URL + "/api/v1/orders")
+                .then()
+                .log().all()
+               .extract();
+
+
     }
 
 }

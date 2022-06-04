@@ -46,7 +46,6 @@ public class CourierCreationTest {
 
         Courier courier = new Courier("", getRandomCourier().getPassword(), getRandomCourier().getFirstName());
         Response responseCreate = createCourier(courier);
-        responseCreate.then().log().all().extract();
         assertEquals(SC_BAD_REQUEST, responseCreate.statusCode());
         assertEquals("Недостаточно данных для создания учетной записи",responseCreate.body().jsonPath().getString("message"));
 
@@ -58,7 +57,6 @@ public class CourierCreationTest {
     public void courierNotPasswordTest() {
         Courier courier = new Courier(getRandomCourier().getLogin(), "", getRandomCourier().getFirstName());
         Response responseCreate = createCourier(courier);
-        responseCreate.then().log().all().extract();
         assertEquals(SC_BAD_REQUEST, responseCreate.statusCode());
         assertEquals("Недостаточно данных для создания учетной записи",responseCreate.body().jsonPath().getString("message"));
 
@@ -76,7 +74,6 @@ public class CourierCreationTest {
         createCourier(courier);
         Courier courierTwo = new Courier(login, courier.getPassword(), courier.getFirstName());
         Response responseCreate = createCourier(courierTwo);
-        responseCreate.then().log().all().extract();
         Assert.assertEquals(SC_CONFLICT, responseCreate.statusCode());
         assertEquals("Этот логин уже используется",responseCreate.body().jsonPath().getString("message"));
     }
@@ -89,7 +86,6 @@ public class CourierCreationTest {
         createCourier(courier);
         Courier courierTwo = new Courier(courier.getLogin(), courier.getPassword(), courier.getFirstName());
         Response responseCreate = createCourier(courierTwo);
-        responseCreate.then().log().all().extract();
         Assert.assertEquals(SC_CONFLICT, responseCreate.statusCode());
         assertEquals("Этот логин уже используется",responseCreate.body().jsonPath().getString("message"));
 

@@ -48,7 +48,6 @@ public class LoginCourierTest {
         CourierCredentials courierCredentials = new CourierCredentials(" ", " ");
         //Провека Логирование курьера
         Response responseLogin = loginCourier(courierCredentials);
-        responseLogin.then().log().all().extract();
         //Ответ об ошибке авторизации
         assertEquals(SC_NOT_FOUND, responseLogin.statusCode());
         assertEquals("Учетная запись не найдена", responseLogin.body().jsonPath().getString("message") );
@@ -65,7 +64,6 @@ public class LoginCourierTest {
         CourierCredentials courierCredentials = new CourierCredentials("", courier.getPassword());
         //Провека Логирование курьера
         Response responseLogin = loginCourier(courierCredentials);
-        responseLogin.then().log().all().extract();
         //Ответ об ошибке авторизации
         assertEquals(SC_BAD_REQUEST, responseLogin.statusCode());
         assertEquals( "Недостаточно данных для входа",responseLogin.body().jsonPath().getString("message"));
@@ -80,7 +78,6 @@ public class LoginCourierTest {
         CourierCredentials courierCredentials = new CourierCredentials(courier.getLogin(), "");
         //Провека Логирование курьера
         Response responseLogin = loginCourier(courierCredentials);
-        responseLogin.then().log().all().extract();
         //Ответ об ошибке авторизации
         assertEquals(SC_BAD_REQUEST, responseLogin.statusCode());
         assertEquals("Недостаточно данных для входа", responseLogin.body().jsonPath().getString("message"));
@@ -95,12 +92,26 @@ public class LoginCourierTest {
         CourierCredentials courierCredentials = new CourierCredentials(courier.getLogin(), courier.getPassword());
         //Провека Логирование курьера
         Response responseLogin = loginCourier(courierCredentials);
-        responseLogin.then().log().all().extract();
         //Ответ ошибке авторизации
         assertEquals(SC_NOT_FOUND, responseLogin.statusCode());
         assertEquals("Учетная запись не найдена", responseLogin.body().jsonPath().getString("message"));
 
     }
+    @Test
+    @DisplayName("Авторизация c незаполненными Логин и Пароль ") // имя теста
+    @Description("Недостаточно данных для входа(Логин и пароль не заполнены),")
+    public void emptyLoginPasswordTest () {
+        //Ввод рандомного логина
+        CourierCredentials courierCredentials = new CourierCredentials();
+        //Провека Логирование курьера
+        Response responseLogin = loginCourier(courierCredentials);
+        //Ответ ошибке авторизации
+        assertEquals(SC_BAD_REQUEST, responseLogin.statusCode());
+        assertEquals("Недостаточно данных для входа", responseLogin.body().jsonPath().getString("message"));
+
+    }
+
+
 
     @After
     public void clear() {
