@@ -3,12 +3,16 @@ package ru.yandex.praktikum;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.yandex.praktikum.model.Courier;
 import ru.yandex.praktikum.model.CourierCredentials;
 import static org.apache.http.HttpStatus.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static ru.yandex.praktikum.CourierClient.*;
 import static ru.yandex.praktikum.model.Courier.getRandomCourier;
@@ -34,8 +38,8 @@ public class LoginCourierTest {
         Response responseLogin = loginCourier(courierCredentials);
         //Ответ об успешной авторизации
         assertEquals(SC_OK, responseLogin.statusCode());
-        courierId = responseLogin.body().jsonPath().getInt("id");
-        assertEquals(courierId, responseLogin.body().jsonPath().getInt("id"));
+        MatcherAssert.assertThat(responseLogin.body().jsonPath().getInt( "id"), CoreMatchers.not(equalTo(0)));
+
     }
 
     @Test
